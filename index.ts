@@ -9,10 +9,13 @@ import GroupsRouter from './api/groups'
 import { auth_middleware, setup_middleware } from './api/Middlewares'
 import AuthRouter from "./api/auth";
 
+import cors from 'cors'
+
 // setups first
 setup().then(() => {
     const app = express()
 
+    app.use(cors())
     app.use(setup_middleware)
     app.use(json())
     //app.use('/api', auth_middleware)

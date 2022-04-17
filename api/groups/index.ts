@@ -28,9 +28,31 @@ GroupsRouter.post('/groups', async (req: Request, res: Response) => {
 
             res.send({
                 group_id: saved.Id,
-                group_name: saved.Name
+                group_name: saved.Name,
+                todos: []
             })
         }
+    }
+})
+
+GroupsRouter.delete('/groups/:id', async (req: Request, res: Response) => {
+    const id = req.params['id']
+
+    if ( id ) {
+        console.log(` [x] Removing Group ${id}`)
+
+        const group = await Group.findOneBy({ Id: id })
+
+        if ( group !== null )
+            await group.remove()
+        else {
+            console.log(` [x] Couldn't find Group with id ${id}`)
+            res.sendStatus(500)    // it's probably not 500 but I don't give a shit tbh
+        }
+    }
+    else {
+        console.log(` [x] No task id was provided.`)
+        res.sendStatus(500)
     }
 })
 
@@ -56,7 +78,6 @@ GroupsRouter.get('/groups', async (req: Request, res: Response) => {
                     }
                 }
             })).map(x => {
-                console.log(x)
                 return {
                     group_id: x.Id,
                     name: x.Name,

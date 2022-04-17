@@ -1,13 +1,11 @@
-import { Entity, BaseEntity, Column, OneToMany, PrimaryColumn } from 'typeorm'
+import { Entity, BaseEntity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import Group from './Group'
 import {v4 as uuid} from 'uuid'
 
 @Entity()
 export default class User extends BaseEntity {
     
-    @PrimaryColumn("uuid", {
-        default: uuid()
-    })
+    @PrimaryGeneratedColumn("uuid")
     Id!: string
 
     @Column()

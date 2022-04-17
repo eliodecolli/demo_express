@@ -1,13 +1,11 @@
-import { Entity, BaseEntity, Column, OneToMany, ManyToOne, PrimaryColumn } from 'typeorm'
+import { Entity, BaseEntity, Column, OneToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import Todo from './Todo';
 import User from './User';
 import {v4 as uuid} from 'uuid'
 
 @Entity()
 export default class Group extends BaseEntity {
-    @PrimaryColumn("uuid", {
-        default: uuid()
-    })
+    @PrimaryGeneratedColumn("uuid")
     Id!: string;
 
     @Column()

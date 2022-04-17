@@ -31,6 +31,29 @@ TodoRouter.post('/todo/toggle/:id', async (req: Request, res: Response) => {
     }
 })
 
+TodoRouter.delete('/todo/:id', async (req: Request, res: Response) => {
+    const id = req.params['id']
+
+    if ( id ) {
+        console.log(` [x] Removing Task ${id}`)
+
+        const todo = await Todo.findOneBy({ Id: id })
+
+        if ( todo !== null ){
+            await todo.remove()
+            res.sendStatus(200)
+        }
+        else {
+            console.log(` [x] Couldn't find Task with id ${id}`)
+            res.sendStatus(500)    // it's probably not 500 but I don't give a shit tbh
+        }
+    }
+    else {
+        console.log(` [x] No task id was provided.`)
+        res.sendStatus(500)
+    }
+})
+
 TodoRouter.post('/todo', async (req: Request, res: Response) => {
     console.log(' [x] Creating new todo')
 
@@ -55,9 +78,10 @@ TodoRouter.post('/todo', async (req: Request, res: Response) => {
             console.log(` [x] Created Task ${saved.Id} for user ${userId}`)
 
             res.send({
-                todo_id: saved.Id,
-                todo_text: saved.Text,
-                group_id: saved.Group.Id
+                id: saved.Id,
+                text: saved.Text,
+                group_id: saved.Group.Id,
+                is_completed: false
             })
         }
     }

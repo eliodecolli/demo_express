@@ -1,13 +1,11 @@
-import { Entity, BaseEntity, Column, ManyToOne, PrimaryColumn } from 'typeorm'
+import { Entity, BaseEntity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import Group from './Group'
 import User from './User'
 import {v4 as uuid} from 'uuid'
 
 @Entity()
 export default class Todo extends BaseEntity {
-    @PrimaryColumn("uuid", {
-        default: uuid()
-    })
+    @PrimaryGeneratedColumn("uuid")
     Id!: string
 
     @Column()
@@ -16,10 +14,10 @@ export default class Todo extends BaseEntity {
     @Column({default: false})
     Completed!: boolean
 
-    @ManyToOne(() => Group, g => g.TodoList)
+    @ManyToOne(() => Group, g => g.TodoList, { onDelete: 'CASCADE' })
     Group!: Group
 
-    @ManyToOne(() => User)
+    @ManyToOne(() => User, { cascade: true })
     Owner!: User
 }
 
