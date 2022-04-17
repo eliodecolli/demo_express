@@ -15,7 +15,7 @@ setup().then(() => {
 
     app.use(setup_middleware)
     app.use(json())
-    app.use('/api', auth_middleware)
+    //app.use('/api', auth_middleware)
     app.use('/api', TodoRouter)
     app.use('/api', GroupsRouter)
     app.use('/auth', AuthRouter)
