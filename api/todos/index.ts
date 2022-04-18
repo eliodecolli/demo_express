@@ -57,34 +57,26 @@ TodoRouter.delete('/todo/:id', async (req: Request, res: Response) => {
 TodoRouter.post('/todo', async (req: Request, res: Response) => {
     console.log(' [x] Creating new todo')
 
-    let token = req.get('X-Token')
-    
-    if ( token !== undefined ) {
-        const decoded = decode(token) as JwtPayload
+    const userId = req.UserId
 
-        if ( decoded !== null ) {
-            const userId = decoded['user_id']
+    // fuck validations and shit
+    const user = await User.findOneBy({ Id: userId }) as User
+    const group = await Group.findOneBy({ Id: req.body['group_id'] }) as Group
 
-            // fuck validations and shit
-            const user = await User.findOneBy({ Id: userId }) as User
-            const group = await Group.findOneBy({ Id: req.body['group_id'] }) as Group
+    const todo = new Todo()
+    todo.Group = group
+    todo.Owner = user
+    todo.Text = req.body['text']
 
-            const todo = new Todo()
-            todo.Group = group
-            todo.Owner = user
-            todo.Text = req.body['text']
+    const saved = await todo.save()
+    console.log(` [x] Created Task ${saved.Id} for user ${userId}`)
 
-            const saved = await todo.save()
-            console.log(` [x] Created Task ${saved.Id} for user ${userId}`)
-
-            res.send({
-                id: saved.Id,
-                text: saved.Text,
-                group_id: saved.Group.Id,
-                is_completed: false
-            })
-        }
-    }
+    res.send({
+        id: saved.Id,
+        text: saved.Text,
+        group_id: saved.Group.Id,
+        is_completed: false
+    })
 })
 
 export default TodoRouter;

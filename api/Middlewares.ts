@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { verify } from 'jsonwebtoken'
+import { decode, Jwt, JwtPayload, verify } from 'jsonwebtoken'
 import { ENV } from '../core/entry'
 
 export function auth_middleware(req: Request, res: Response, next: any) {
@@ -10,9 +10,9 @@ export function auth_middleware(req: Request, res: Response, next: any) {
     }
     else {
         // @ts-ignore - ENV is handled via middleware
-        verify(token, ENV.privateKey, (error, _) => {
+        verify(token, ENV.privateKey, (error, decoded: JwtPayload) => {
             if ( error === null ) {
-                // next
+                req.UserId = decoded['user_id']
                 next()
             }
             else {

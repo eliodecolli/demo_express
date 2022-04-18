@@ -29,6 +29,8 @@ AuthRouter.post('/signup', async (req: Request, res: Response) => {
         token: null
     }
 
+    console.log(` [x] Trying to register user ${userDetails.username}`)
+
     // let's suppose I'm validating username and password here...
     const userExists = (await User.findOneBy( { Username: userDetails.username } ) !== null)
     if ( userExists ) {
@@ -58,6 +60,8 @@ AuthRouter.post('/login', async (req: Request, res: Response) => {
         message: '',
         token: null
     }
+
+    console.log(` [x] Trying to login user ${userDetails.username}`)
 
     const user = await User.findOneBy( {Username: userDetails.username })
     if ( user === null ) {
